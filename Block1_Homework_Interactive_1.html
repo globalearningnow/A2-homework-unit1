@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Block 1 — Homework | Fernanda</title>
+<style>
+  :root{
+    --green:#2f7a5c; --green-light:#e8f5ef;
+    --terracotta:#c0504d; --terracotta-light:#fbe9e8;
+    --purple:#6b5b95; --purple-light:#efeaf7;
+    --blue:#2f5f8a; --blue-light:#e8f1fa;
+    --ink:#2b2b2b; --muted:#6b6b6b; --paper:#fbfaf7; --card:#ffffff;
+    --ok:#2f7a5c; --bad:#c0504d; --border:#e3e0d8;
+  }
+  *{box-sizing:border-box}
+  body{margin:0; font-family:'Segoe UI',system-ui,-apple-system,sans-serif; background:var(--paper); color:var(--ink); line-height:1.5; padding-bottom:60px;}
+  header{background:linear-gradient(135deg,var(--blue),#1e3f5c); color:#fff; padding:28px 20px 22px; text-align:center;}
+  header h1{margin:0 0 4px; font-size:1.5rem}
+  header p{margin:0; opacity:.9; font-size:.95rem}
+  .wrap{max-width:760px; margin:0 auto; padding:0 16px}
+  section.block{background:var(--card); border:1px solid var(--border); border-radius:14px; margin-top:22px; padding:20px 20px 24px; box-shadow:0 2px 8px rgba(0,0,0,.04);}
+  .block-head{display:flex; align-items:center; gap:10px; margin-bottom:6px}
+  .letter{width:34px; height:34px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; color:#fff; flex:none; font-size:1rem;}
+  h2{margin:0; font-size:1.15rem}
+  .instr{color:var(--muted); font-size:.92rem; margin:6px 0 16px}
+  .A .letter{background:var(--green)} .A h2{color:var(--green)}
+  .B .letter{background:var(--terracotta)} .B h2{color:var(--terracotta)}
+  .C .letter{background:var(--purple)} .C h2{color:var(--purple)}
+  .D .letter{background:var(--blue)} .D h2{color:var(--blue)}
+  .E .letter{background:#8a8a8a} .E h2{color:#555}
+
+  /* Task A - categorize vocab */
+  .word-row{display:grid; grid-template-columns:1fr 1fr; gap:10px; align-items:center; margin-bottom:8px; padding:8px 10px; background:#fafafa; border-radius:8px;}
+  .word-row .word{font-weight:600}
+  select{width:100%; padding:9px 8px; border-radius:8px; border:1.5px solid var(--border); font-size:.92rem; background:#fff; color:var(--ink);}
+  select.correct{border-color:var(--ok); background:var(--green-light)}
+  select.incorrect{border-color:var(--bad); background:var(--terracotta-light)}
+
+  /* Task B */
+  .sentence-item{margin-bottom:12px; padding:10px 12px; background:#fafafa; border-radius:8px; border:1px solid var(--border)}
+  .sentence-item.correct{border-color:var(--ok); background:var(--green-light)}
+  .sentence-item.incorrect{border-color:var(--bad); background:var(--terracotta-light)}
+
+  /* Task C - unscramble */
+  .sentence-box{margin-bottom:18px; padding:12px 14px; background:#fafafa; border-radius:10px; border:1px solid var(--border)}
+  .sentence-box .qnum{font-weight:700; color:var(--purple); margin-bottom:8px; font-size:.9rem}
+  .tiles{display:flex; flex-wrap:wrap; gap:8px; margin-bottom:10px; min-height:30px}
+  .tile{background:#fff; border:1.5px solid var(--purple); color:var(--purple); padding:7px 12px; border-radius:8px; cursor:pointer; font-size:.92rem; user-select:none; transition:transform .1s;}
+  .tile:hover{transform:scale(1.05)}
+  .tile.used{opacity:.3; pointer-events:none}
+  .answer-line{min-height:38px; border-bottom:2px dashed var(--border); padding:6px 4px; display:flex; flex-wrap:wrap; gap:6px; align-items:center;}
+  .answer-line .ans-tile{background:var(--purple-light); border:1px solid var(--purple); color:var(--purple); padding:6px 10px; border-radius:6px; font-size:.9rem; cursor:pointer;}
+  .redo{background:none; border:none; color:var(--muted); font-size:.78rem; cursor:pointer; margin-top:6px; text-decoration:underline}
+  .sentence-box.correct{border-color:var(--ok); background:var(--green-light)}
+  .sentence-box.incorrect{border-color:var(--bad)}
+
+  /* Task D - people */
+  .people{display:flex; flex-direction:column; gap:18px}
+  .person-card{border:1px solid var(--border); border-radius:12px; overflow:hidden}
+  .person-top{display:flex; align-items:center; gap:14px; padding:12px 14px; background:var(--blue-light)}
+  .avatar{width:48px; height:48px; border-radius:50%; background:var(--blue); color:#fff; display:flex; align-items:center; justify-content:center; font-size:1.4rem; flex:none;}
+  .speak-btn{margin-left:auto; background:var(--blue); color:#fff; border:none; border-radius:20px; padding:7px 12px; font-size:.8rem; cursor:pointer; display:flex; align-items:center; gap:5px;}
+  .fill-sentence{padding:14px; font-size:.95rem}
+  .blank-select{display:inline-block; padding:4px 6px; border-radius:6px; border:1.5px solid var(--blue); background:#fff; font-size:.9rem; margin:0 2px; color:var(--ink);}
+  .blank-select.correct{border-color:var(--ok); background:var(--green-light)}
+  .blank-select.incorrect{border-color:var(--bad); background:var(--terracotta-light)}
+
+  /* Task E */
+  .q-item{margin-bottom:14px}
+  .q-item label{display:block; font-weight:600; margin-bottom:5px; font-size:.93rem}
+  textarea{width:100%; border:1.5px solid var(--border); border-radius:8px; padding:9px 10px; font-family:inherit; font-size:.92rem; resize:vertical; min-height:38px;}
+  .note{font-size:.8rem; color:var(--muted); font-style:italic; margin-top:4px}
+
+  .check-btn{background:var(--ink); color:#fff; border:none; padding:11px 22px; border-radius:24px; font-size:.95rem; font-weight:600; cursor:pointer; margin-top:8px;}
+  .check-btn:hover{opacity:.88}
+  .feedback{margin-top:12px; padding:10px 14px; border-radius:8px; font-size:.9rem; font-weight:600; display:none}
+  .feedback.show{display:block}
+  .feedback.good{background:var(--green-light); color:var(--ok)}
+  .feedback.bad{background:var(--terracotta-light); color:var(--bad)}
+
+  .progress-bar{position:sticky; top:0; z-index:10; background:#fff; border-bottom:1px solid var(--border); padding:10px 16px; display:flex; align-items:center; gap:12px; font-size:.85rem;}
+  .progress-track{flex:1; height:8px; background:#eee; border-radius:5px; overflow:hidden}
+  .progress-fill{height:100%; background:linear-gradient(90deg,var(--blue),var(--purple)); width:0%; transition:width .4s}
+
+  footer{text-align:center; color:var(--muted); font-size:.85rem; margin-top:30px; padding:0 20px}
+  .fallback-warning{display:none; background:#fff3cd; color:#7a5c00; padding:8px 14px; border-radius:8px; font-size:.82rem; text-align:center; max-width:760px; margin:14px auto 0;}
+</style>
+</head>
+<body>
+
+<div class="progress-bar">
+  <span id="progressLabel">Progress: 0%</span>
+  <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+</div>
+
+<header>
+  <h1>💼 Block 1 — Homework</h1>
+  <p>Present Simple vs Present Continuous · Work & Routines · tap 🔊 to listen</p>
+</header>
+
+<div id="fallbackWarning" class="fallback-warning">⚠️ Voice playback isn't supported in this browser — text is still fully usable.</div>
+
+<div class="wrap">
+
+  <!-- TASK A -->
+  <section class="block A">
+    <div class="block-head"><div class="letter">A</div><h2>Vocabulary: Work & Schedules</h2></div>
+    <p class="instr">Complete the collocation, choose the correct profession, or pick the synonym.</p>
+    <div id="vocabWrap"></div>
+    <button class="check-btn" onclick="checkA()">Check</button>
+    <div class="feedback" id="feedbackA"></div>
+  </section>
+
+  <!-- TASK B -->
+  <section class="block B">
+    <div class="block-head"><div class="letter">B</div><h2>Present Simple or Present Continuous?</h2></div>
+    <p class="instr">Choose the correct verb form for each sentence.</p>
+    <div id="grammarWrap"></div>
+    <button class="check-btn" onclick="checkB()">Check</button>
+    <div class="feedback" id="feedbackB"></div>
+  </section>
+
+  <!-- TASK C -->
+  <section class="block C">
+    <div class="block-head"><div class="letter">C</div><h2>Unscramble</h2></div>
+    <p class="instr">Tap the words in the correct order to make each sentence.</p>
+    <div id="unscramble"></div>
+    <button class="check-btn" onclick="checkC()">Check</button>
+    <div class="feedback" id="feedbackC"></div>
+  </section>
+
+  <!-- TASK D -->
+  <section class="block D">
+    <div class="block-head"><div class="letter">D</div><h2>Listen: Who's Busy Today?</h2></div>
+    <p class="instr">Listen and complete each sentence with what you hear.</p>
+    <div class="people" id="peopleWrap"></div>
+    <button class="check-btn" onclick="checkD()">Check</button>
+    <div class="feedback" id="feedbackD"></div>
+  </section>
+
+  <!-- TASK E -->
+  <section class="block E">
+    <div class="block-head"><div class="letter">E</div><h2>Write About You</h2></div>
+    <p class="instr">Answer in full sentences. Mix your routine (Present Simple) with what's happening now (Present Continuous).</p>
+    <div id="personalQs"></div>
+    <p class="note">This section isn't auto-checked — Fernanda will review it with you in class. 😊</p>
+  </section>
+
+  <footer>See you in class — Fernanda.</footer>
+</div>
+
+<script>
+/* Voice list loads asynchronously in some browsers */
+let cachedVoices = [];
+function loadVoices(){ cachedVoices = window.speechSynthesis ? window.speechSynthesis.getVoices() : []; }
+if('speechSynthesis' in window){
+  loadVoices();
+  window.speechSynthesis.onvoiceschanged = loadVoices;
+}
+function pickVoice(keywords){
+  for(const kw of keywords){
+    const found = cachedVoices.find(v => v.lang.startsWith('en') && v.name.toLowerCase().includes(kw));
+    if(found) return found;
+  }
+  return cachedVoices.find(v => v.lang.startsWith('en')) || null;
+}
+/* Each character gets a distinct voice when the browser offers one, and a
+   distinct pitch/rate always (works even when only one system voice exists) */
+function speak(text, profile){
+  if(!('speechSynthesis' in window)){ document.getElementById('fallbackWarning').style.display='block'; return; }
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = 'en-US';
+  u.rate = (profile && profile.rate) || 0.88;
+  u.pitch = (profile && profile.pitch) || 1;
+  if(profile && profile.voiceKeywords){
+    const v = pickVoice(profile.voiceKeywords);
+    if(v) u.voice = v;
+  }
+  window.speechSynthesis.speak(u);
+}
+
+let sectionsDone = {A:false,B:false,C:false,D:false};
+function updateProgress(){
+  const total = Object.keys(sectionsDone).length;
+  const done = Object.values(sectionsDone).filter(Boolean).length;
+  const pct = Math.round((done/total)*100);
+  document.getElementById('progressFill').style.width = pct+'%';
+  document.getElementById('progressLabel').textContent = 'Progress: '+pct+'%';
+}
+
+/* ================= TASK A — quick vocab (collocation / profession / synonym) ================= */
+const vocabItems = [
+  {type:"Collocation", prompt:"attend a ___", options:["meeting","salary","deadline"], answer:"meeting"},
+  {type:"Collocation", prompt:"meet a ___", options:["deadline","colleague","appointment"], answer:"deadline"},
+  {type:"Profession", prompt:"Someone who sells products to customers", options:["Sales representative","HR consultant","Accountant"], answer:"Sales representative"},
+  {type:"Profession", prompt:"Someone who hires and manages staff issues", options:["Developer","HR consultant","Sales representative"], answer:"HR consultant"},
+  {type:"Synonym", prompt:"Appointment", options:["Meeting","Salary","Deadline"], answer:"Meeting"},
+  {type:"Synonym", prompt:"Colleague", options:["Coworker","Manager","Client"], answer:"Coworker"},
+];
+function buildA(){
+  let html='';
+  vocabItems.forEach((v,idx)=>{
+    html += `<div class="word-row" style="grid-template-columns:1fr">
+      <div class="word" style="margin-bottom:6px">${v.type}: ${v.prompt}</div>
+      <select id="vocab${idx}"><option value="">Choose…</option>${v.options.map(o=>`<option value="${o}">${o}</option>`).join('')}</select>
+    </div>`;
+  });
+  document.getElementById('vocabWrap').innerHTML = html;
+}
+function checkA(){
+  let correct=0;
+  vocabItems.forEach((v,idx)=>{
+    const sel = document.getElementById('vocab'+idx);
+    const ok = sel.value === v.answer;
+    sel.classList.remove('correct','incorrect');
+    sel.classList.add(ok?'correct':'incorrect');
+    if(ok) correct++;
+  });
+  const fb = document.getElementById('feedbackA');
+  fb.className = 'feedback show ' + (correct===vocabItems.length?'good':'bad');
+  fb.textContent = correct===vocabItems.length ? '🎉 Perfect! All correct.' : `${correct}/${vocabItems.length} correct. Fix the red ones and check again.`;
+  sectionsDone.A = correct===vocabItems.length; updateProgress();
+}
+
+/* ================= TASK B — Present Simple vs Continuous ================= */
+const grammarItems = [
+  {sentence:"She ___ in the marketing department.", options:["works","is working","working"], answer:"works"},
+  {sentence:"Right now, she ___ on a new campaign.", options:["works","is working","work"], answer:"is working"},
+  {sentence:"I usually ___ work at 9 AM.", options:["start","am starting","starts"], answer:"start"},
+  {sentence:"This week, I ___ work at 7 AM because of a special project.", options:["start","am starting","starts"], answer:"am starting"},
+  {sentence:"They ___ a meeting every Monday.", options:["have","are having","having"], answer:"have"},
+  {sentence:"Look! They ___ a meeting right now.", options:["have","are having","has"], answer:"are having"},
+  {sentence:"He ___ emails on weekends. (negative)", options:["doesn't check","isn't checking","don't check"], answer:"doesn't check"},
+  {sentence:"We ___ the client tomorrow at 10 — it's already in the calendar.", options:["meet","are meeting","meets"], answer:"are meeting"},
+];
+function buildB(){
+  let html='';
+  grammarItems.forEach((g,idx)=>{
+    html += `<div class="sentence-item" id="gitem${idx}">
+      <div style="margin-bottom:6px">${idx+1}. ${g.sentence}</div>
+      <select id="g${idx}"><option value="">Choose…</option>${g.options.map(o=>`<option value="${o}">${o}</option>`).join('')}</select>
+    </div>`;
+  });
+  document.getElementById('grammarWrap').innerHTML = html;
+}
+function checkB(){
+  let correct=0;
+  grammarItems.forEach((g,idx)=>{
+    const sel = document.getElementById('g'+idx);
+    const item = document.getElementById('gitem'+idx);
+    const ok = sel.value === g.answer;
+    item.classList.remove('correct','incorrect');
+    item.classList.add(ok?'correct':'incorrect');
+    if(ok) correct++;
+  });
+  const fb = document.getElementById('feedbackB');
+  fb.className = 'feedback show ' + (correct===grammarItems.length?'good':'bad');
+  fb.textContent = correct===grammarItems.length ? '🎉 Perfect! All correct.' : `${correct}/${grammarItems.length} correct. Try the red ones again.`;
+  sectionsDone.B = correct===grammarItems.length; updateProgress();
+}
+
+/* ================= TASK C — unscramble ================= */
+const sentencesC = [
+  {answer:["She","is","working","on","a","new","project","right","now","."]},
+  {answer:["I","usually","check","my","emails","in","the","morning","."]},
+  {answer:["We","are","having","a","meeting","today","."]},
+  {answer:["He","doesn't","like","early","meetings","."]},
+  {answer:["They","are","preparing","for","a","big","presentation","this","week","."]}
+];
+function shuffle(arr){ const a=[...arr]; for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]];} return a; }
+function buildC(){
+  let html='';
+  sentencesC.forEach((s,idx)=>{
+    const shuffled = shuffle(s.answer);
+    html += `<div class="sentence-box" id="sbox${idx}">
+      <div class="qnum">${idx+1}.</div>
+      <div class="answer-line" id="ansLine${idx}"></div>
+      <div class="tiles" id="tiles${idx}">
+        ${shuffled.map((w,ti)=>`<span class="tile" data-word="${w}" onclick="pickTile(${idx},${ti},this)">${w}</span>`).join('')}
+      </div>
+      <button class="redo" onclick="resetSentence(${idx})">↺ reset order</button>
+    </div>`;
+  });
+  document.getElementById('unscramble').innerHTML = html;
+}
+function pickTile(idx, ti, el){
+  if(el.classList.contains('used')) return;
+  el.classList.add('used');
+  const line = document.getElementById('ansLine'+idx);
+  const span = document.createElement('span');
+  span.className='ans-tile';
+  span.textContent = el.dataset.word;
+  span.onclick = function(){ line.removeChild(span); el.classList.remove('used'); };
+  line.appendChild(span);
+}
+function resetSentence(idx){
+  document.getElementById('ansLine'+idx).innerHTML='';
+  document.querySelectorAll('#tiles'+idx+' .tile').forEach(t=>t.classList.remove('used'));
+  document.getElementById('sbox'+idx).classList.remove('correct','incorrect');
+}
+function checkC(){
+  let correctCount=0;
+  sentencesC.forEach((s,idx)=>{
+    const line = document.getElementById('ansLine'+idx);
+    const built = [...line.children].map(c=>c.textContent);
+    const box = document.getElementById('sbox'+idx);
+    const ok = JSON.stringify(built) === JSON.stringify(s.answer);
+    box.classList.remove('correct','incorrect');
+    box.classList.add(ok?'correct':'incorrect');
+    if(ok) correctCount++;
+  });
+  const fb = document.getElementById('feedbackC');
+  fb.className = 'feedback show ' + (correctCount===sentencesC.length?'good':'bad');
+  fb.textContent = correctCount===sentencesC.length ? '🎉 Perfect! All sentences correct.' : `${correctCount}/${sentencesC.length} correct. Tap tiles to remove them and try again.`;
+  sectionsDone.C = correctCount===sentencesC.length; updateProgress();
+}
+
+/* ================= TASK D — listening ================= */
+const people = [
+  {name:"Laura", emoji:"👩‍💼", job:"marketing manager", routine:"checks social media every morning", now:"preparing a presentation for tomorrow's meeting",
+   convo:"Hey! So, I'm a marketing manager over at the agency. Normally I check social media every morning, first thing — but honestly, this week's been crazy. I'm preparing a presentation for tomorrow's meeting, so I haven't even had a coffee break yet!",
+   voice:{pitch:1.15, rate:0.92, voiceKeywords:["female","zira","samantha","victoria","karen"]}},
+  {name:"Carlos", emoji:"👨‍💻", job:"sales representative", routine:"calls clients every afternoon", now:"negotiating a new contract this week",
+   convo:"Hi there. I work as a sales representative. Most days I call clients every afternoon — that's pretty much my routine. Right now, though, I'm negotiating a new contract this week, so things are a bit intense.",
+   voice:{pitch:0.75, rate:0.85, voiceKeywords:["male","david","daniel","alex","fred"]}},
+  {name:"Mei", emoji:"👩‍🔬", job:"HR consultant", routine:"interviews candidates every week", now:"organizing a training session",
+   convo:"So, I'm an HR consultant, and usually I interview candidates every week — it's a regular part of my job. But at the moment, I'm organizing a training session, so my schedule looks a little different than usual.",
+   voice:{pitch:1.35, rate:0.98, voiceKeywords:["female","moira","tessa","susan","female 2"]}}
+];
+const jobBank = ["marketing manager","sales representative","HR consultant","accountant","developer"];
+const routineBank = ["checks social media every morning","calls clients every afternoon","interviews candidates every week","reviews budgets every month"];
+const nowBank = ["preparing a presentation for tomorrow's meeting","negotiating a new contract this week","organizing a training session","redesigning the website"];
+
+function buildD(){
+  let html='';
+  people.forEach((p,idx)=>{
+    html += `<div class="person-card">
+      <div class="person-top">
+        <div class="avatar">${p.emoji}</div>
+        <div><strong>${p.name}</strong></div>
+        <button class="speak-btn" data-idx="${idx}">🔊 Listen</button>
+      </div>
+      <div class="fill-sentence">
+        ${p.name} is a
+        <select class="blank-select" id="d${idx}job"><option value="">…</option>${jobBank.map(j=>`<option>${j}</option>`).join('')}</select>.
+        Usually, ${p.name}
+        <select class="blank-select" id="d${idx}routine"><option value="">…</option>${routineBank.map(r=>`<option>${r}</option>`).join('')}</select>.
+        Right now, ${p.name} is
+        <select class="blank-select" id="d${idx}now"><option value="">…</option>${nowBank.map(n=>`<option>${n}</option>`).join('')}</select>.
+      </div>
+    </div>`;
+  });
+  document.getElementById('peopleWrap').innerHTML = html;
+  document.querySelectorAll('#peopleWrap .speak-btn').forEach(btn=>{
+    btn.addEventListener('click', function(){
+      const p = people[parseInt(this.dataset.idx)];
+      speak(p.convo, p.voice);
+    });
+  });
+}
+function checkD(){
+  let correct=0;
+  people.forEach((p,idx)=>{
+    const jSel=document.getElementById('d'+idx+'job');
+    const rSel=document.getElementById('d'+idx+'routine');
+    const nSel=document.getElementById('d'+idx+'now');
+    const jOk=jSel.value===p.job, rOk=rSel.value===p.routine, nOk=nSel.value===p.now;
+    [[jSel,jOk],[rSel,rOk],[nSel,nOk]].forEach(([el,ok])=>{
+      el.classList.remove('correct','incorrect'); el.classList.add(ok?'correct':'incorrect');
+    });
+    if(jOk&&rOk&&nOk) correct++;
+  });
+  const fb = document.getElementById('feedbackD');
+  fb.className = 'feedback show ' + (correct===people.length?'good':'bad');
+  fb.textContent = correct===people.length ? '🎉 Perfect! All three correct.' : `${correct}/${people.length} people correct so far.`;
+  sectionsDone.D = correct===people.length; updateProgress();
+}
+
+/* ================= TASK E ================= */
+const questionsE = [
+  "What's your job?",
+  "What do you usually do at work? (routine)",
+  "What are you working on this week? (current project)",
+  "Do you have any meetings today?",
+  "Write 2-3 sentences about a colleague's current project."
+];
+function buildE(){
+  let html='';
+  questionsE.forEach((q,idx)=>{
+    html += `<div class="q-item"><label>${idx+1}. ${q}</label><textarea rows="1" placeholder="Type your answer…"></textarea></div>`;
+  });
+  document.getElementById('personalQs').innerHTML = html;
+}
+
+buildA(); buildB(); buildC(); buildD(); buildE(); updateProgress();
+</script>
+</body>
+</html>
